@@ -4,6 +4,20 @@ def parse_string(raw):
         raise ValueError("Cannot be empty")
     return " ".join(string.split()).title()
 
+
+def parse_id(raw):
+    product_id = raw.strip()
+    if not product_id:
+        raise ValueError("Cannot be empty")
+    try:
+        product_id = int(product_id)
+        if product_id <= 0:
+            raise ValueError("Must be a positive number")
+        return product_id
+    except ValueError:
+        raise ValueError("Must be an integer number")
+    
+
 def parse_price(raw):
     price = raw.strip()
     if not price:
@@ -27,3 +41,12 @@ def parse_stock(raw):
         raise ValueError("Must be a not negative number")
 
 # def parse_menu(raw):
+
+
+def choice_from(options):
+    def parser(raw):
+        choice = raw.strip()
+        if choice not in options:
+            raise ValueError(f"Invalid choise")
+        return choice
+    return parser

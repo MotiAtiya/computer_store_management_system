@@ -1,7 +1,7 @@
 from .user_input import ask
-from .validators import parse_string, parse_price, parse_stock
+from .validators import parse_string, parse_id, parse_price, parse_stock, choice_from
 from .helpers import get_uniqe_id
-
+from .printer import display_menu, display_single_product
 
 def add_product(products:list):
     product_name = ask(parse_string, "Enter product name: ")
@@ -20,3 +20,44 @@ def add_product(products:list):
     }
     products.append(new_product)
 
+
+
+def search_by_id(products):
+    product_id = ask(parse_id, "Enter product ID: ")
+    for p in products:
+            if p["id"] == product_id:
+                return p
+    return None
+
+
+def search_by_name(products):
+    product_name = ask(parse_string, "Enter product name: ")
+    for p in products:
+            if product_name in p["name"]:
+                return p
+    return None
+
+
+def search_by_category(products):
+    product_category = ask(parse_string, "Enter product category: ")
+    for p in products:
+            if product_category in p["category"]:
+                return p
+    return None
+
+
+def search_product(products:list):
+    menu = {
+        "1": ("Search by product ID", search_by_id),
+        "2": ("Search by product name", search_by_name),
+        "3": ("Search by category", search_by_category)
+    }
+
+    display_menu(menu)
+    menu_parser = choice_from(list(menu))
+    choice = ask(menu_parser, "Enter your choice [1-3]: ")
+    product = menu[choice][1](products)
+    if product:
+         display_single_product(product)
+    else:
+         print("Product not found")
