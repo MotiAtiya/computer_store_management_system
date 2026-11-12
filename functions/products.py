@@ -1,13 +1,13 @@
 from .user_input import ask, edit
-from .validators import parse_string, parse_id, parse_price, parse_stock, choice_from, parse_yes_no_confirmatino
+from .validators import parse_string, parse_positive_int_number, parse_positive_float_number, parse_not_negative_int_number, choice_from, parse_yes_no_confirmatino
 from .helpers import get_uniqe_id
 from .printer import display_menu, display_single_product, display_option_title, display_active_products
 
 def add_product(products:list):
     product_name = ask(parse_string, "Enter product name: ")
     product_category = ask(parse_string, "Enter product category: ")
-    product_price = ask(parse_price, "Enter product price: ")
-    product_stock = ask(parse_stock, "Enter product stock: ")
+    product_price = ask(parse_positive_float_number, "Enter product price: ")
+    product_stock = ask(parse_not_negative_int_number, "Enter product stock: ")
     product_id = get_uniqe_id(products)
 
     new_product = {
@@ -22,7 +22,7 @@ def add_product(products:list):
 
 
 def search_by_id(products):
-    product_id = ask(parse_id, "Enter product ID: ")
+    product_id = ask(parse_positive_int_number, "Enter product ID: ")
     for p in products:
             if p["id"] == product_id:
                 return p
@@ -45,7 +45,7 @@ def search_by_category(products):
     return None
 
 
-def search_product(products:list):
+def search_product(products:list, in_stock=False):
     menu = {
         "1": ("Search by product ID", search_by_id),
         "2": ("Search by product name", search_by_name),
@@ -57,12 +57,11 @@ def search_product(products:list):
     choice = ask(menu_parser, f"\nChoose an option [1-{len(menu)}]: ")
     action = menu[choice][1]
     product = action(products)
-    if product:
-         display_single_product(product)
-         return product
-    else:
-         print("Product not found")
-         return None
+    if not product or (in_stock and not product["stock"]):
+        print("Product not found", in_stock * "in stock")
+        return None
+    display_single_product(product)
+    return product
 
 
 def update_product(products:list):
@@ -72,8 +71,8 @@ def update_product(products:list):
 
     product["name"] = edit(parse_string, f"Enter product name", product["name"])
     product["category"] = edit(parse_string, f"Enter product category", product["category"])
-    product["price"] = edit(parse_price, f"Enter product price", product["price"])
-    product["stock"] = edit(parse_stock, f"Enter product stock", product["stock"])
+    product["price"] = edit(parse_positive_float_number, f"Enter product price", product["price"])
+    product["stock"] = edit(parse_not_negative_int_number, f"Enter product stock", product["stock"])
 
 
 def delete_product(products:list):

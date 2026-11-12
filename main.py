@@ -3,14 +3,14 @@ from functions.products import search_product, update_product, delete_product, p
 from functions.printer import display_menu, display_system_title
 from functions.user_input import ask
 from functions.validators import choice_from
-
+from functions.inventory import inventory_management
 
 def main():
     products = initial_products
 
     menu = {
         "1": ("Products Management", product_management),
-        "2": ("Inventory Management", ),
+        "2": ("Inventory Management", inventory_management),
         "3": ("Sales Management", ),
         "4": ("Reports", ),
         "5": ("Exit", None)
@@ -25,7 +25,7 @@ def main():
         if action is None:
             print("Bye!")
             break
-        
+
         action(products)
 
 if __name__ == "__main__":

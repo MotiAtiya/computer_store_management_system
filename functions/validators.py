@@ -5,33 +5,33 @@ def parse_string(raw):
     return " ".join(string.split()).title()
 
 
-def parse_id(raw):
-    product_id = raw.strip()
-    if not product_id:
+def parse_positive_int_number(raw):
+    num = raw.strip()
+    if not num:
         raise ValueError("Cannot be empty")
     try:
-        product_id = int(product_id)
+        num = int(num)
     except ValueError:
         raise ValueError("Must be an integer number")
-    if product_id <= 0:
+    if num <= 0:
         raise ValueError("Must be a positive number")
-    return product_id
+    return num
     
 
-def parse_price(raw):
-    price = raw.strip()
-    if not price:
+def parse_positive_float_number(raw):
+    num = raw.strip()
+    if not num:
         raise ValueError("Cannot be empty")
     try:
-        price = float(price)
+        num = float(num)
     except ValueError:
         raise ValueError("Must be a number")
-    if price <= 0:
+    if num <= 0:
         raise ValueError("Must be a positive number")
-    return price
+    return num
 
 
-def parse_stock(raw):
+def parse_not_negative_int_number(raw):
     stock = raw.strip()
     if not stock:
         raise ValueError("Cannot be empty")
