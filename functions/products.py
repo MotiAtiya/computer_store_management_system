@@ -1,5 +1,5 @@
 from .user_input import ask, edit
-from .validators import parse_string, parse_id, parse_price, parse_stock, choice_from
+from .validators import parse_string, parse_id, parse_price, parse_stock, choice_from, parse_yes_no_confirmatino
 from .helpers import get_uniqe_id
 from .printer import display_menu, display_single_product
 
@@ -74,3 +74,14 @@ def update_product(products:list):
     product["category"] = edit(parse_string, f"Enter product category", product["category"])
     product["price"] = edit(parse_price, f"Enter product price", product["price"])
     product["stock"] = edit(parse_stock, f"Enter product stock", product["stock"])
+
+
+def delete_product(products:list):
+    product = search_product(products)
+    if not product:
+        return
+
+    user_confirmation = ask(parse_yes_no_confirmatino, "Are you sure you want to delete this product? [y/n]")
+    if user_confirmation in ['yes', 'y', 'Y']:
+        products.remove(product)
+    
