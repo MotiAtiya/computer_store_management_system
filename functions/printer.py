@@ -21,4 +21,16 @@ def display_active_products(products:list):
 
 def display_menu(menu):
     for index, option in menu.items():
-        print(index, option[0])
+        print(f"{index}. {option[0]}")
+
+
+def display_system_title():
+    print("""
+=================================
+       COMPUTER STORE SYSTEM
+=================================
+    """)
+
+
+def display_option_title(option_title):
+    print(f"\n--------- {option_title} ---------\n")

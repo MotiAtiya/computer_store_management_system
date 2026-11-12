@@ -11,11 +11,11 @@ def parse_id(raw):
         raise ValueError("Cannot be empty")
     try:
         product_id = int(product_id)
-        if product_id <= 0:
-            raise ValueError("Must be a positive number")
-        return product_id
     except ValueError:
         raise ValueError("Must be an integer number")
+    if product_id <= 0:
+        raise ValueError("Must be a positive number")
+    return product_id
     
 
 def parse_price(raw):
@@ -28,6 +28,7 @@ def parse_price(raw):
         raise ValueError("Must be a number")
     if price <= 0:
         raise ValueError("Must be a positive number")
+    return price
 
 
 def parse_stock(raw):
@@ -40,14 +41,20 @@ def parse_stock(raw):
         raise ValueError("Must be an integer number")
     if stock < 0:
         raise ValueError("Must be a not negative number")
+    return stock
 
 
 def choice_from(options):
     def parser(raw):
         choice = raw.strip()
-        if choice not in options:
-            raise ValueError(f"Invalid choise")
-        return choice
+        try:
+            int(choice)
+        except ValueError:
+            raise ValueError("Must be an integer number")
+        else:
+            if choice not in options:
+                raise ValueError("Invalid choice")
+            return choice
     return parser
 
 

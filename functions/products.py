@@ -1,7 +1,7 @@
 from .user_input import ask, edit
 from .validators import parse_string, parse_id, parse_price, parse_stock, choice_from, parse_yes_no_confirmatino
 from .helpers import get_uniqe_id
-from .printer import display_menu, display_single_product
+from .printer import display_menu, display_single_product, display_option_title, display_active_products
 
 def add_product(products:list):
     product_name = ask(parse_string, "Enter product name: ")
@@ -19,7 +19,6 @@ def add_product(products:list):
         "active": True
     }
     products.append(new_product)
-
 
 
 def search_by_id(products):
@@ -55,8 +54,9 @@ def search_product(products:list):
 
     display_menu(menu)
     menu_parser = choice_from(list(menu))
-    choice = ask(menu_parser, "Enter your choice [1-3]: ")
-    product = menu[choice][1](products)
+    choice = ask(menu_parser, f"\nChoose an option [1-{len(menu)}]: ")
+    action = menu[choice][1]
+    product = action(products)
     if product:
          display_single_product(product)
          return product
@@ -85,3 +85,24 @@ def delete_product(products:list):
     if user_confirmation in ['yes', 'y', 'Y']:
         products.remove(product)
     
+
+def product_management(products:list):
+    while True:
+        menu = {
+            "1": ("Add Product", add_product),
+            "2": ("Display All Products", display_active_products),
+            "3": ("Search Product", search_product),
+            "4": ("Update Product", update_product),
+            "5": ("Delete Product", delete_product),
+            "6": ("Back to Main Menu", None)
+        }
+
+        display_option_title("PRODUCTS MANAGEMENT")
+        display_menu(menu)
+        menu_parser = choice_from(list(menu))
+        choice = ask(menu_parser, f"\nChoose an option [1-{len(menu)}]: ")
+        action = menu[choice][1]
+        if action is None:
+            break
+
+        action(products)
