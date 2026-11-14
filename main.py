@@ -2,6 +2,7 @@ from functions.printer import display_system_title
 from functions.products import product_management
 from functions.inventory import inventory_management
 from functions.sales import new_sell
+from functions.reports import reports
 from functions.menu import get_action
 
 from DATA.initial_products import initial_products
@@ -16,7 +17,7 @@ def main():
         "1": ("Products Management", lambda: product_management(products)),
         "2": ("Inventory Management", lambda: inventory_management(products)),
         "3": ("Sales Management", lambda: new_sell(products, sales)),
-        "4": ("Reports", ),
+        "4": ("Reports", lambda: reports(products, sales)),
         "5": ("Exit", None)
     }
 

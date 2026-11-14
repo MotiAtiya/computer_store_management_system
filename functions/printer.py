@@ -12,8 +12,7 @@ def display_products(products:list):
     print("ID".ljust(5), "Name".ljust(40), "Category".ljust(30), "Price".ljust(10), "Stock".ljust(10))
     print()
     for p in products:
-        if p["active"]:
-            print(str(p["id"]).ljust(5), str(p["name"]).ljust(40), str(p["category"]).ljust(30), str(p["price"]).ljust(10), p["stock"])
+        print(str(p["id"]).ljust(5), str(p["name"]).ljust(40), str(p["category"]).ljust(30), str(p["price"]).ljust(10), p["stock"])
 
 
 def display_active_products(products:list):
@@ -39,8 +38,13 @@ def display_option_title(option_title):
     print(f"\n--------- {option_title} ---------\n")
 
 
+def display_function_title(function_title):
+    clear_screen()
+    print(function_title)
+    print("-" * len(function_title))
+    print()
+
 def display_sale_summary(sale):
-    print("=========== SALE SUMMARY ===========\n")
     for item in sale["items"]:
         print(f"{str(item["name"]).ljust(25)}{item["quantity"]} X {item["unit_price"]} = {item["total"]}")
 

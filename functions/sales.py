@@ -78,6 +78,7 @@ def complete_sale(products:list, cart:dict, salses:list):
         "total": total
     }
 
+    print("=========== SALE SUMMARY ===========\n")
     display_sale_summary(sale)
     salses.append(sale)
     
