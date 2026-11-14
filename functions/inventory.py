@@ -9,27 +9,27 @@ def search_product_in_stock(products:list):
 
 
 def update_stock(product, quantity):
-    product["stock"] += quantity
+    product['stock'] += quantity
 
 def add_to_stock(products:list):
     product = search_product(products)
-    quantity = ask(parse_not_negative_int_number, "Enter quantity to add to inventory: ")
+    quantity = ask(parse_positive_int_number, "Enter quantity to add to inventory: ")
     update_stock(product, quantity)
-    print(f"\n{quantity} units of {product["name"]} added successfuly!")
+    print(f"\n{quantity} units of {product['name']} added successfuly!")
 
 
 def remove_from_stock(products:list):
     product = search_product(products, True)
-    quantity = ask(parse_not_negative_int_number, "Enter quantity to remove from the inventory: ")
-    if quantity > product["stock"]:
+    quantity = ask(parse_positive_int_number, "Enter quantity to remove from the inventory: ")
+    if quantity > product['stock']:
         raise ValueError("Not enough in stock")
     
-    update_stock(products, -quantity)
-    print(f"\n{quantity} units of {product["name"]} removed successfuly!")
+    update_stock(product, -quantity)
+    print(f"\n{quantity} units of {product['name']} removed successfuly!")
 
 
 def in_stock_products(products:list):
-    in_stock = list(filter(lambda p: p["stock"] > 0 ,products))
+    in_stock = list(filter(lambda p: p['stock'] > 0 ,products))
     if not in_stock:
         raise ValueError("The stock is empty")
 
@@ -37,7 +37,7 @@ def in_stock_products(products:list):
 
 
 def out_of_stock_products(products:list):
-    out_of_stock = list(filter(lambda p: p["stock"] == 0 ,products))
+    out_of_stock = list(filter(lambda p: p['stock'] == 0 ,products))
     if not out_of_stock:
         raise ValueError("There are no out of stock products in system")
 
@@ -46,7 +46,7 @@ def out_of_stock_products(products:list):
 
 def low_stock_products(products:list):
     low_threshold = ask(parse_positive_int_number, "Define Low Inventory Threshold: ")
-    low_stock = list(filter(lambda p: p["stock"] <= low_threshold ,products))
+    low_stock = list(filter(lambda p: p['stock'] <= low_threshold ,products))
     if not low_stock:
         raise ValueError("There are no los stock pruduct in system")
     

@@ -7,6 +7,6 @@ def clear_screen():
 
 
 def get_next_id(array):
-    latest_id = max(array, key=lambda a: a["id"])
-    return latest_id["id"] + 1
+    latest_id = max(array, key=lambda a: a['id'])
+    return latest_id['id'] + 1
 

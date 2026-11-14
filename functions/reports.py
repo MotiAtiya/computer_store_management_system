@@ -1,14 +1,13 @@
-from .printer import display_option_title, display_function_title, display_products
+from .printer import display_option_title, display_function_title, display_sale_summary
 from .menu import get_action, enter_to_continue
 from .products import get_product_by_id
-from .sales import display_sale_summary
 
 def total_sales(sales:list):
     print(len(sales), "sales in total")
 
 
 def total_revenue(sales:list):
-    total = sum(sale["total"] for sale in sales)
+    total = sum(sale['total'] for sale in sales)
     print(total)
 
 
@@ -18,27 +17,24 @@ def best_selling_products(products:list, sales:list):
     
     selling_products = {}
     for sale in sales:
-        for item in sale["items"]:
-            product_id = item["product_id"]
-            if product_id in selling_products:
-                selling_products[product_id] += item["quantity"]
-            else:
-                selling_products[product_id] = item["quantity"]
+        for item in sale['items']:
+            product_id = item['product_id']
+            selling_products[product_id] = selling_products.get(product_id, 0) + item['quantity']
 
 
     best_5 = sorted(selling_products, key=lambda k: selling_products[k], reverse=True)[:5]
 
     for product_id in best_5:
         product = get_product_by_id(products, product_id)
-        print(f"{str(f"{product["name"]}:").ljust(25)} {selling_products[product_id]} units") # type: ignore
+        print(f"{str(f"{product['name']}:").ljust(25)} {selling_products[product_id]} units") # type: ignore
 
 
 def average_sale(sales:list):
     if not sales:
         raise ValueError("No sales in system")
 
-    total = sum(sale["total"] for sale in sales)
-    average = total / len(sales)
+    total = sum(sale['total'] for sale in sales)
+    average = round(total / len(sales), 2)
     print(average)
 
 
@@ -47,7 +43,7 @@ def sales_history(sales:list):
         raise ValueError("No sales in system")
 
     for sale in sales:
-        print("Sale ID:", sale["id"])
+        print("Sale ID:", sale['id'])
         display_sale_summary(sale)
         print()
 
@@ -58,13 +54,13 @@ def category_statistics(products:list, sales:list):
     
     categories = {}
     for sale in sales:
-        for item in sale["items"]:
-            product = get_product_by_id(products, item["product_id"])
-            category = product["category"] # type: ignore
+        for item in sale['items']:
+            product = get_product_by_id(products, item['product_id'])
+            category = product['category'] # type: ignore
             if category in categories:
-                categories[category] += item["quantity"]
+                categories[category] += item['quantity']
             else:
-                categories[category] = item["quantity"]
+                categories[category] = item['quantity']
 
 
     for category in categories:

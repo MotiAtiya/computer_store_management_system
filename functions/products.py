@@ -25,7 +25,7 @@ def add_product(products:list):
 
 def get_product_by_id(products, product_id):
     for p in products:
-        if p["id"] == product_id:
+        if p['id'] == product_id:
             return p
     return None
 
@@ -38,7 +38,7 @@ def search_by_id(products):
 def search_by_name(products):
     product_name = ask(parse_string, "Enter product name: ")
     for p in products:
-            if product_name in p["name"]:
+            if product_name.lower() in p['name'].lower():
                 return p
     return None
 
@@ -46,7 +46,7 @@ def search_by_name(products):
 def search_by_category(products):
     product_category = ask(parse_string, "Enter product category: ")
     for p in products:
-            if product_category in p["category"]:
+            if product_category.lower() in p['category'].lower():
                 return p
     return None
 
@@ -60,7 +60,7 @@ def search_product(products:list, in_stock=False):
 
     _, action = get_action(menu)
     product = action(products)
-    if not product or (in_stock and not product["stock"]):
+    if not product or (in_stock and not product['stock']):
         raise ValueError(f"Product not found{in_stock * " in stock"}")
         
     display_single_product(product)
@@ -70,21 +70,21 @@ def search_product(products:list, in_stock=False):
 def update_product(products:list):
     product = search_product(products)
 
-    product["name"] = edit(parse_string, f"Enter product name", product["name"])
-    product["category"] = edit(parse_string, f"Enter product category", product["category"])
-    product["price"] = edit(parse_positive_float_number, f"Enter product price", product["price"])
-    product["stock"] = edit(parse_not_negative_int_number, f"Enter product stock", product["stock"])
+    product['name'] = edit(parse_string, f"Enter product name", product['name'])
+    product['category'] = edit(parse_string, f"Enter product category", product['category'])
+    product['price'] = edit(parse_positive_float_number, f"Enter product price", product['price'])
+    product['stock'] = edit(parse_not_negative_int_number, f"Enter product stock", product['stock'])
 
-    print(f"\n{product["name"]} updated successfuly!")
+    print(f"\n{product['name']} updated successfuly!")
 
 def delete_product(products:list):
     product = search_product(products)
     user_confirmation = ask(parse_yes_no_confirmation, "Are you sure you want to delete this product? [y/n]")
     if user_confirmation == 'y':
-        products.remove(product)
-
-    print(f"\n{product["name"]} removed successfuly!")
-    
+        product['active'] = False
+        print(f"\n{product['name']} removed successfuly!")
+    else:
+        print("Deletion cancelled!")
 
 def product_management(products:list):
     menu = {
@@ -107,5 +107,6 @@ def product_management(products:list):
             action(products)
         except ValueError as e:
             print("Error:", e)
-        finally: enter_to_continue()
+        finally:
+            enter_to_continue()
 

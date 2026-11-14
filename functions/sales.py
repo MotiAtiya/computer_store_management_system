@@ -13,17 +13,17 @@ def add_item_to_cart(products:list, cart:dict):
     product = search_by_id(products)
     if not product:
         raise ValueError("Product not found")
-    if not product["active"]:
+    if not product['active']:
         raise ValueError("Product not active")
     
     quantity = ask(parse_positive_int_number, "Enter quantity: ")
-    new_quantity = cart.get(product["id"], 0) + quantity
-    if new_quantity > product["stock"]:
+    new_quantity = cart.get(product['id'], 0) + quantity
+    if new_quantity > product['stock']:
         raise ValueError("Not enough quantity in stock")
 
-    cart[product["id"]] = new_quantity
+    cart[product['id']] = new_quantity
 
-    print(f"\n{product["name"]} added successfuly to cart!")
+    print(f"\n{product['name']} added successfuly to cart!")
 
 
 def get_cart_product(products:list, cart:dict):
@@ -33,7 +33,7 @@ def get_cart_product(products:list, cart:dict):
     product = search_by_id(products)
     if not product:
         raise ValueError("Product not found")
-    if product["id"] not in cart:
+    if product['id'] not in cart:
         raise ValueError("Product not in cart")
         
     return product
@@ -42,16 +42,16 @@ def get_cart_product(products:list, cart:dict):
 def update_quantity(products:list, cart:dict):
     product = get_cart_product(products, cart)
     quantity = ask(parse_positive_int_number, "Enter quantity: ")
-    if quantity > product["stock"]:
+    if quantity > product['stock']:
             raise ValueError("Not enough quantity in stock")
-    cart[product["id"]] = quantity
-    print(f"\n{product["name"]} updated successfuly to {quantity} units!")
+    cart[product['id']] = quantity
+    print(f"\n{product['name']} updated successfuly to {quantity} units!")
 
 
 def remove_item(products:list, cart:dict):
     product = get_cart_product(products, cart)
-    del cart[product["id"]]
-    print(f"\n{product["name"]} removed successfuly to from the cart")
+    del cart[product['id']]
+    print(f"\n{product['name']} removed successfuly to from the cart")
 
 
 def build_items_from_cart(products:list, cart:dict):
@@ -61,10 +61,10 @@ def build_items_from_cart(products:list, cart:dict):
         update_stock(product, -quantity)
         item = {
             "product_id": product_id,
-            "name": product["name"],                # type: ignore
+            "name": product['name'],                # type: ignore
             "quantity": quantity,
-            "unit_price": product["price"],         # type: ignore
-            "total": product["price"] * quantity    # type: ignore
+            "unit_price": product['price'],         # type: ignore
+            "total": product['price'] * quantity    # type: ignore
         }
         cart_items.append(item)
     return cart_items
@@ -77,8 +77,8 @@ def complete_sale(products:list, cart:dict, salses:list):
     discount = ask(parse_percentage, "Enter discount [0-100]: ")
     sale_id = get_next_id(salses)
     items = build_items_from_cart(products, cart)
-    subtotal = sum(item["total"] for item in items)
-    total = subtotal - subtotal * discount / 100
+    subtotal = sum(item['total'] for item in items)
+    total = round(subtotal - subtotal * discount / 100, 2)
 
     sale = {
         "id": sale_id,
