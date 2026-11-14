@@ -15,69 +15,68 @@ def add_item_to_cart(products:list, cart:dict):
         raise ValueError("Product not found")
     if not product["active"]:
         raise ValueError("Product not active")
-    product_id = product["id"]
-    quantitiy = ask(parse_positive_int_number, "Enter quantity: ")
-    if quantitiy > product["stock"]:
-        raise ValueError("Not enough quantity in stock")
-    if product_id in cart and quantitiy + cart[product_id] > product["stock"]:
+    
+    quantity = ask(parse_positive_int_number, "Enter quantity: ")
+    new_quantity = cart.get(product["id"], 0) + quantity
+    if new_quantity > product["stock"]:
         raise ValueError("Not enough quantity in stock")
 
-    if product_id in cart:
-        cart[product_id] += quantitiy
-    else:
-        cart[product_id] = quantitiy
+    cart[product["id"]] = new_quantity
 
     print(f"\n{product["name"]} added successfuly to cart!")
 
 
-def update_quantity(products:list, cart:dict):
+def get_cart_product(products:list, cart:dict):
     if not cart:
         raise ValueError("The cart is empty")
     
     product = search_by_id(products)
     if not product:
         raise ValueError("Product not found")
-    if product["id"] not in cart.keys():
+    if product["id"] not in cart:
         raise ValueError("Product not in cart")
-    quantitiy = ask(parse_positive_int_number, "Enter quantity: ")
-    if quantitiy > product["stock"]:
+        
+    return product
+
+
+def update_quantity(products:list, cart:dict):
+    product = get_cart_product(products, cart)
+    quantity = ask(parse_positive_int_number, "Enter quantity: ")
+    if quantity > product["stock"]:
             raise ValueError("Not enough quantity in stock")
-    cart[product["id"]] = quantitiy
-    print(f"\n{product["name"]} updated successfuly to {quantitiy} units!")
+    cart[product["id"]] = quantity
+    print(f"\n{product["name"]} updated successfuly to {quantity} units!")
 
 
 def remove_item(products:list, cart:dict):
-    if not cart:
-        raise ValueError("The cart is empty")
-
-    product = search_by_id(products)
-    if not product:
-        raise ValueError("Product not found")
-    if product["id"] not in cart.keys():
-        raise ValueError("Product not in cart")
+    product = get_cart_product(products, cart)
     del cart[product["id"]]
     print(f"\n{product["name"]} removed successfuly to from the cart")
+
+
+def build_items_from_cart(products:list, cart:dict):
+    cart_items = []
+    for product_id, quantity in cart.items():
+        product = get_product_by_id(products, product_id)
+        update_stock(product, -quantity)
+        item = {
+            "product_id": product_id,
+            "name": product["name"],                # type: ignore
+            "quantity": quantity,
+            "unit_price": product["price"],         # type: ignore
+            "total": product["price"] * quantity    # type: ignore
+        }
+        cart_items.append(item)
+    return cart_items
+
 
 def complete_sale(products:list, cart:dict, salses:list):
     if not cart:
         raise ValueError("The cart is empty")
 
     discount = ask(parse_percentage, "Enter discount [0-100]: ")
-
-    
-    items = []
-    for product_id, quantity in cart.items():
-        product = get_product_by_id(products, product_id)
-        update_stock(product, -quantity)
-        items.append({
-            "product_id": product_id,
-            "name": product["name"],                # type: ignore
-            "quantity": quantity,
-            "unit_price": product["price"],         # type: ignore
-            "total": product["price"] * quantity    # type: ignore
-        })
-
     sale_id = get_next_id(salses)
+    items = build_items_from_cart(products, cart)
     subtotal = sum(item["total"] for item in items)
     total = subtotal - subtotal * discount / 100
 
@@ -92,6 +91,7 @@ def complete_sale(products:list, cart:dict, salses:list):
     print("=========== SALE SUMMARY ===========\n")
     display_sale_summary(sale)
     salses.append(sale)
+    return True
     
 
 def sales_management(products:list, sales:list):
@@ -104,11 +104,7 @@ def sales_management(products:list, sales:list):
     }
 
     cart = {}
-
-    if not cart:
-        print("Cart is empty\n")
-
-    num_of_sales = len(sales)
+    print("Cart is empty\n")
 
     while True:
         display_option_title("Sales Management")
@@ -118,12 +114,9 @@ def sales_management(products:list, sales:list):
 
         try:
             display_function_title(title)
-            action()
+            if action():
+                break
         except ValueError as e:
             print("Error:", e)
         finally:
             enter_to_continue()
-
-        if len(sales) > num_of_sales:
-            break
-        
