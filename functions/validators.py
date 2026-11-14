@@ -6,29 +6,34 @@ def parse_string(raw):
 
 
 def parse_positive_int_number(raw):
-    num = raw.strip()
-    if not num:
+    int_num = raw.strip()
+    if not int_num:
         raise ValueError("Cannot be empty")
     try:
-        num = int(num)
+        int_num = int(int_num)
     except ValueError:
         raise ValueError("Must be an integer number")
-    if num <= 0:
+    if int_num <= 0:
         raise ValueError("Must be a positive number")
-    return num
+    return int_num
     
 
-def parse_positive_float_number(raw):
-    num = raw.strip()
-    if not num:
+def parse_float_number(raw):
+    float_num = raw.strip()
+    if not float_num:
         raise ValueError("Cannot be empty")
     try:
-        num = float(num)
+        float_num = float(float_num)
     except ValueError:
         raise ValueError("Must be a number")
-    if num <= 0:
+    return float_num
+
+
+def parse_positive_float_number(raw):
+    pos_float_num = parse_float_number(raw)
+    if pos_float_num <= 0:
         raise ValueError("Must be a positive number")
-    return num
+    return pos_float_num
 
 
 def parse_not_negative_int_number(raw):
@@ -58,10 +63,18 @@ def choice_from(options):
     return parser
 
 
-def parse_yes_no_confirmatino(raw):
+def parse_yes_no_confirmation(raw):
     confirm = raw.strip()
     if not confirm:
         raise ValueError("Cannot be empty")
     if confirm not in ['yes', 'y', 'Y', 'no', 'n', 'N']:
         raise ValueError("Invalid choise. Only yes (y) or no (n)")
-    return confirm
+    return 'y' if confirm in ['yes', 'y', 'Y'] else 'n'
+
+
+def parse_percentage(raw):
+    percentage = parse_float_number(raw)
+    if not 0 <= percentage <= 100:
+        raise ValueError("Must be between 0-100")
+    return percentage
+    

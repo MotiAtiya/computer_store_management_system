@@ -1,3 +1,4 @@
+from .helpers import clear_screen
 
 
 def display_single_product(product:dict):
@@ -16,35 +17,7 @@ def display_products(products:list):
 
 
 def display_active_products(products:list):
-    if not products:
-        print("There are no products in system")
-        return
-
     display_products(list(filter(lambda p: p["active"] == True ,products)))
-
-
-def display_in_stock_products(products:list):
-    if not products:
-        print("The stock is empty")
-        return
-
-    display_products(list(filter(lambda p: p["stock"] > 0 ,products)))
-
-
-def display_out_of_stock_products(products:list):
-    if not products:
-        print("There are no products in system")
-        return
-
-    display_products(list(filter(lambda p: p["stock"] == 0 ,products)))
-
-    
-def display_low_stock_products(products:list, low_threshold):
-    if not products:
-        print("There are no products in system")
-        return
-
-    display_products(list(filter(lambda p: p["stock"] <= low_threshold ,products)))
 
     
 def display_menu(menu):
@@ -53,6 +26,7 @@ def display_menu(menu):
 
 
 def display_system_title():
+    clear_screen()
     print("""
 =================================
        COMPUTER STORE SYSTEM
@@ -61,5 +35,21 @@ def display_system_title():
 
 
 def display_option_title(option_title):
+    clear_screen()
     print(f"\n--------- {option_title} ---------\n")
 
+
+def display_sale_summary(sale):
+    print("=========== SALE SUMMARY ===========\n")
+    for item in sale["items"]:
+        print(f"{str(item["name"]).ljust(25)}{item["quantity"]} X {item["unit_price"]} = {item["total"]}")
+
+    print("\n------------------------------------")
+    print(f"{str("Subtotal:").ljust(30)}{sale["subtotal"]}")
+    print(f"{str("Discount:").ljust(30)}{sale["discount"]}%")
+    print(f"{str("Total:").ljust(30)}{sale["total"]}")
+    print("====================================")
+
+
+def display_continue_msg():
+    input("\n\nPress Enter to continue... ")
