@@ -8,10 +8,13 @@ def search_product_in_stock(products:list):
      search_product(products, True)
 
 
+def update_stock(product, quantity):
+    product["stock"] += quantity
+
 def add_to_stock(products:list):
     product = search_product(products)
     quantity = ask(parse_not_negative_int_number, "Enter quantity to add to inventory: ")
-    product["stock"] += quantity
+    update_stock(products, quantity)
 
 
 def remove_from_stock(products:list):
@@ -20,7 +23,7 @@ def remove_from_stock(products:list):
     if quantity > product["stock"]:
         raise ValueError("Not enough in stock")
     
-    product["stock"] -= quantity
+    update_stock(products, -quantity)
 
 
 def in_stock_products(products:list):

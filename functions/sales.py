@@ -4,6 +4,7 @@ from .validators import parse_positive_int_number, choice_from, parse_percentage
 from .products import search_by_id, get_product_by_id
 from .helpers import get_next_id
 from .menu import get_action
+from .inventory import update_stock
 
 
 def add_item_to_cart(products:list, cart:dict):
@@ -56,6 +57,7 @@ def complete_sale(products:list, cart:dict, salses:list):
     items = []
     for product_id, quantity in cart.items():
         product = get_product_by_id(products, product_id)
+        update_stock(product, -quantity)
         items.append({
             "product_id": product_id,
             "name": product["name"],                # type: ignore
