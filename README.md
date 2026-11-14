@@ -1,2 +1,5 @@
 # computer_store_management_system
-Project in Python
+### Mordechai Atiya
+
+to run the project: `python main.py`
+
