@@ -1,9 +1,9 @@
-from .printer import display_option_title, display_sale_summary, display_continue_msg
+from .printer import display_option_title, display_sale_summary
 from .user_input import ask
 from .validators import parse_positive_int_number, choice_from, parse_percentage
 from .products import search_by_id, get_product_by_id
 from .helpers import get_next_id
-from .menu import get_action
+from .menu import get_action, enter_to_continue
 from .inventory import update_stock
 
 
@@ -112,7 +112,7 @@ def new_sell(products:list, sales:list):
         except ValueError as e:
             print("Error:", e)
         finally:
-            display_continue_msg()
+            enter_to_continue()
 
         if len(sales) > num_of_sales:
             break

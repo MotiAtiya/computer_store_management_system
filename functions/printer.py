@@ -50,6 +50,3 @@ def display_sale_summary(sale):
     print(f"{str("Total:").ljust(30)}{sale["total"]}")
     print("====================================")
 
-
-def display_continue_msg():
-    input("\n\nPress Enter to continue... ")

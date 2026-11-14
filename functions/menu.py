@@ -8,3 +8,6 @@ def get_action(menu):
     choice = ask(menu_parser, f"\nChoose an option [1-{len(menu)}]: ")
     action = menu[choice][1]
     return action
+
+def enter_to_continue():
+    input("\n\nPress Enter to continue... ")

@@ -1,8 +1,8 @@
-from .printer import display_option_title, display_menu, display_active_products, display_continue_msg
+from .printer import display_option_title, display_menu, display_active_products
 from .validators import parse_not_negative_int_number, parse_positive_int_number
 from .user_input import ask
 from .products import search_product
-from .menu import get_action
+from .menu import get_action, enter_to_continue
 
 def search_product_in_stock(products:list):
      search_product(products, True)
@@ -73,5 +73,5 @@ def inventory_management(products:list):
         except ValueError as e:
             print("Error:", e)
         finally:
-            display_continue_msg()
+            enter_to_continue()
 

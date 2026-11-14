@@ -1,7 +1,5 @@
+from functions.printer import display_system_title
 from functions.products import product_management
-from functions.printer import display_menu, display_system_title, display_continue_msg
-from functions.user_input import ask
-from functions.validators import choice_from
 from functions.inventory import inventory_management
 from functions.sales import new_sell
 from functions.menu import get_action

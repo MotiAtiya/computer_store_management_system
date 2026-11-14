@@ -1,8 +1,8 @@
 from .user_input import ask, edit
 from .validators import parse_string, parse_positive_int_number, parse_positive_float_number, parse_not_negative_int_number, parse_yes_no_confirmation
 from .helpers import get_next_id
-from .printer import display_single_product, display_option_title, display_active_products, display_continue_msg
-from .menu import get_action
+from .printer import display_single_product, display_option_title, display_active_products
+from .menu import get_action, enter_to_continue
 
 def add_product(products:list):
     product_name = ask(parse_string, "Enter product name: ")
@@ -102,5 +102,5 @@ def product_management(products:list):
             action(products)
         except ValueError as e:
             print("Error:", e)
-        finally: display_continue_msg()
+        finally: enter_to_continue()
 
