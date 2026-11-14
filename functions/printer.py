@@ -35,7 +35,7 @@ def display_system_title():
 
 def display_option_title(option_title):
     clear_screen()
-    print(f"\n--------- {option_title} ---------\n")
+    print(f"\n--------- {option_title.upper()} ---------\n")
 
 
 def display_function_title(function_title):

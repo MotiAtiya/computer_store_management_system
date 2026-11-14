@@ -1,4 +1,4 @@
-from .printer import display_option_title, display_menu, display_active_products
+from .printer import display_option_title, display_active_products, display_function_title
 from .validators import parse_not_negative_int_number, parse_positive_int_number
 from .user_input import ask
 from .products import search_product
@@ -14,7 +14,8 @@ def update_stock(product, quantity):
 def add_to_stock(products:list):
     product = search_product(products)
     quantity = ask(parse_not_negative_int_number, "Enter quantity to add to inventory: ")
-    update_stock(products, quantity)
+    update_stock(product, quantity)
+    print(f"\n{quantity} units of {product["name"]} added successfuly!")
 
 
 def remove_from_stock(products:list):
@@ -24,6 +25,7 @@ def remove_from_stock(products:list):
         raise ValueError("Not enough in stock")
     
     update_stock(products, -quantity)
+    print(f"\n{quantity} units of {product["name"]} removed successfuly!")
 
 
 def in_stock_products(products:list):
@@ -63,12 +65,13 @@ def inventory_management(products:list):
     }
 
     while True:
-        display_option_title("INVENTORY MANAGEMENT")
-        action = get_action(menu)
+        display_option_title("Inventory Management")
+        title, action = get_action(menu)
         if action is None:
             break
 
         try:
+            display_function_title(title)
             action(products)
         except ValueError as e:
             print("Error:", e)

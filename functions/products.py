@@ -1,7 +1,7 @@
 from .user_input import ask, edit
 from .validators import parse_string, parse_positive_int_number, parse_positive_float_number, parse_not_negative_int_number, parse_yes_no_confirmation
 from .helpers import get_next_id
-from .printer import display_single_product, display_option_title, display_active_products
+from .printer import display_single_product, display_option_title, display_active_products, display_function_title
 from .menu import get_action, enter_to_continue
 
 def add_product(products:list):
@@ -20,6 +20,7 @@ def add_product(products:list):
         "active": True
     }
     products.append(new_product)
+    print(f"\n{product_name} added to products successfuly!")
 
 
 def get_product_by_id(products, product_id):
@@ -57,7 +58,7 @@ def search_product(products:list, in_stock=False):
         "3": ("Search by category", search_by_category)
     }
 
-    action = get_action(menu)
+    _, action = get_action(menu)
     product = action(products)
     if not product or (in_stock and not product["stock"]):
         raise ValueError(f"Product not found{in_stock * " in stock"}")
@@ -74,12 +75,15 @@ def update_product(products:list):
     product["price"] = edit(parse_positive_float_number, f"Enter product price", product["price"])
     product["stock"] = edit(parse_not_negative_int_number, f"Enter product stock", product["stock"])
 
+    print(f"\n{product["name"]} updated successfuly!")
 
 def delete_product(products:list):
     product = search_product(products)
     user_confirmation = ask(parse_yes_no_confirmation, "Are you sure you want to delete this product? [y/n]")
     if user_confirmation == 'y':
         products.remove(product)
+
+    print(f"\n{product["name"]} removed successfuly!")
     
 
 def product_management(products:list):
@@ -93,12 +97,13 @@ def product_management(products:list):
     }
 
     while True:
-        display_option_title("PRODUCTS MANAGEMENT")
-        action = get_action(menu)
+        display_option_title("Products Management")
+        title, action = get_action(menu)
         if action is None:
             break
 
         try:
+            display_function_title(title)
             action(products)
         except ValueError as e:
             print("Error:", e)

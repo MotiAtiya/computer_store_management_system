@@ -1,13 +1,15 @@
-from .printer import display_option_title, display_sale_summary
+from .printer import display_option_title, display_sale_summary, display_function_title
 from .user_input import ask
-from .validators import parse_positive_int_number, choice_from, parse_percentage
-from .products import search_by_id, get_product_by_id
+from .validators import parse_positive_int_number, parse_percentage
+from .products import search_by_id, get_product_by_id, display_active_products
 from .helpers import get_next_id
 from .menu import get_action, enter_to_continue
 from .inventory import update_stock
 
 
 def add_item_to_cart(products:list, cart:dict):
+    display_active_products(products)
+    print()
     product = search_by_id(products)
     if not product:
         raise ValueError("Product not found")
@@ -25,8 +27,13 @@ def add_item_to_cart(products:list, cart:dict):
     else:
         cart[product_id] = quantitiy
 
+    print(f"\n{product["name"]} added successfuly to cart!")
+
 
 def update_quantity(products:list, cart:dict):
+    if not cart:
+        raise ValueError("The cart is empty")
+    
     product = search_by_id(products)
     if not product:
         raise ValueError("Product not found")
@@ -36,16 +43,20 @@ def update_quantity(products:list, cart:dict):
     if quantitiy > product["stock"]:
             raise ValueError("Not enough quantity in stock")
     cart[product["id"]] = quantitiy
+    print(f"\n{product["name"]} updated successfuly to {quantitiy} units!")
 
 
 def remove_item(products:list, cart:dict):
+    if not cart:
+        raise ValueError("The cart is empty")
+
     product = search_by_id(products)
     if not product:
         raise ValueError("Product not found")
     if product["id"] not in cart.keys():
         raise ValueError("Product not in cart")
     del cart[product["id"]]
-
+    print(f"\n{product["name"]} removed successfuly to from the cart")
 
 def complete_sale(products:list, cart:dict, salses:list):
     if not cart:
@@ -83,32 +94,30 @@ def complete_sale(products:list, cart:dict, salses:list):
     salses.append(sale)
     
 
-def new_sell(products:list, sales:list):
-    display_option_title("NEW SALE")
+def sales_management(products:list, sales:list):
+    menu = {
+        "1": ("Add Item", lambda: add_item_to_cart(products, cart)),
+        "2": ("Update Quantity", lambda: update_quantity(products, cart)),
+        "3": ("Remove Item", lambda: remove_item(products, cart)),
+        "4": ("Complete Sale", lambda: complete_sale(products, cart, sales)),
+        "5": ("Cancel Sale", None)
+    }
 
     cart = {}
 
     if not cart:
-        print("Cart is empty")
+        print("Cart is empty\n")
 
     num_of_sales = len(sales)
 
-    continue_sell = True
-
-    while continue_sell:
-        menu = {
-            "1": ("Add Item", lambda: add_item_to_cart(products, cart)),
-            "2": ("Update Quantity", lambda: update_quantity(products, cart)),
-            "3": ("Remove Item", lambda: remove_item(products, cart)),
-            "4": ("Complete Sale", lambda: complete_sale(products, cart, sales)),
-            "5": ("Cancel Sale", None)
-        }
-
-        action = get_action(menu)
+    while True:
+        display_option_title("Sales Management")
+        title, action = get_action(menu)
         if action is None:
             break
 
         try:
+            display_function_title(title)
             action()
         except ValueError as e:
             print("Error:", e)

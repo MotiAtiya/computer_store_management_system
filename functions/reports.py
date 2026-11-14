@@ -4,12 +4,10 @@ from .products import get_product_by_id
 from .sales import display_sale_summary
 
 def total_sales(sales:list):
-    display_function_title("Total Sales:")
     print(len(sales), "sales in total")
 
 
 def total_revenue(sales:list):
-    display_function_title("Total Revenue:")
     total = sum(sale["total"] for sale in sales)
     print(total)
 
@@ -18,8 +16,6 @@ def best_selling_products(products:list, sales:list):
     if not sales:
         raise ValueError("No sales in system")
     
-    display_function_title("Best Selling Products:")
-
     selling_products = {}
     for sale in sales:
         for item in sale["items"]:
@@ -41,8 +37,6 @@ def average_sale(sales:list):
     if not sales:
         raise ValueError("No sales in system")
 
-    display_function_title("Average Sale:")
-
     total = sum(sale["total"] for sale in sales)
     average = total / len(sales)
     print(average)
@@ -51,8 +45,6 @@ def average_sale(sales:list):
 def sales_history(sales:list):
     if not sales:
         raise ValueError("No sales in system")
-
-    display_function_title("Sales History:")
 
     for sale in sales:
         print("Sale ID:", sale["id"])
@@ -64,8 +56,6 @@ def category_statistics(products:list, sales:list):
     if not sales:
         raise ValueError("No sales in system")
     
-    display_function_title("Category Statistics:")
-
     categories = {}
     for sale in sales:
         for item in sale["items"]:
@@ -95,12 +85,13 @@ def reports(products:list, sales:list):
     }
 
     while True:
-        display_option_title("REPORTS")
-        action = get_action(menu)
+        display_option_title("Reports")
+        title, action = get_action(menu)
         if action is None:
             break
 
         try:
+            display_function_title(title)
             action()
         except ValueError as e:
             print("Error:", e)
